@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class Agent<CustomStateEnum> : MonoBehaviour {
+public abstract class FSM_Agent<CustomStateEnum> : MonoBehaviour {
 
     public NavMeshAgent nm;
     public Transform target;

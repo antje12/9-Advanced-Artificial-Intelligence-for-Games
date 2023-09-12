@@ -10,10 +10,10 @@ public enum BooStates
     Reset
 }
 
-public class Boo : Agent<BooStates> {
+public class Boo : FSM_Agent<BooStates> {
 
     private Transform mario;
-    private Mario marioScript;
+    private BT_Mario marioScript;
     public float minimumDistance = 6f;
     public float minimumAngle = 80f;
 
@@ -26,7 +26,7 @@ public class Boo : Agent<BooStates> {
     private void Start()
     {
         mario = GameObject.Find("Mario").transform;
-        marioScript = mario.GetComponent<Mario>();
+        marioScript = mario.GetComponent<BT_Mario>();
         startPosition = transform.position;
         renderer = GetComponent<SpriteRenderer>();
         collider = GetComponent<CapsuleCollider>();

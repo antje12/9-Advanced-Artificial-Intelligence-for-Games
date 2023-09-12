@@ -1,32 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using SimpleBehaviourTree;
+using UnityEditor;
 
-public enum MarioStates
+public class BT_Mario : TreeHandler
 {
-    GetCoins,
-}
-
-public class Mario : Agent<MarioStates> {
-
     public int score = 0;
+    public NavMeshAgent nm;
+    public Transform target;
 
-
-
-    protected override void FiniteStateMachine()
+    void Update()
     {
-        switch (state)
-        {
-            case MarioStates.GetCoins:
-                MoveTo(GetClosestCoin());
-                //if something then state = 1;
-                break;
-        }
-        
-        
+        Execute();
     }
 
-    Transform GetClosestCoin()
+    public void GetClosestCoin(Node node)
     {
         GameObject[] coins = GameObject.FindGameObjectsWithTag("Coin");
         float minDistance = float.PositiveInfinity;
@@ -40,7 +30,9 @@ public class Mario : Agent<MarioStates> {
                 closestCoin = coin;
             }
         }
-        return closestCoin.transform;
+        this.target = closestCoin.transform;
+        nm.SetDestination(this.target.position);
+		node.SetActionResult(true);
     }
 
     private void OnTriggerEnter(Collider other)

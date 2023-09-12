@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Agent : TreeHandler {
+public class BT_Agent : TreeHandler {
     private int breaker = 0;
     private bool? result = null;
     [SerializeField] private Transform point1;
