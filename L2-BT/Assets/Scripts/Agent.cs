@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class Agent : MonoBehaviour {
+public abstract class Agent<CustomStateEnum> : MonoBehaviour {
 
     public NavMeshAgent nm;
     public Transform target;
 
-    public int state = 0;
+    public CustomStateEnum state;
 
     private void Update()
     {
@@ -22,5 +22,10 @@ public abstract class Agent : MonoBehaviour {
     public void MoveTo(Transform destination)
     {
         nm.SetDestination(destination.position);
+    }
+
+    public void MoveTo(Vector3 destination)
+    {
+        nm.SetDestination(destination);
     }
 }

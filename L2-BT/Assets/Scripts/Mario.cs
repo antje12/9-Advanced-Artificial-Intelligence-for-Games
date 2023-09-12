@@ -2,13 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mario : Agent {
+public enum MarioStates
+{
+    GetCoins,
+}
+
+public class Mario : Agent<MarioStates> {
 
     public int score = 0;
 
+
+
     protected override void FiniteStateMachine()
     {
-        MoveTo(GetClosestCoin());
+        switch (state)
+        {
+            case MarioStates.GetCoins:
+                MoveTo(GetClosestCoin());
+                //if something then state = 1;
+                break;
+        }
+        
         
     }
 
