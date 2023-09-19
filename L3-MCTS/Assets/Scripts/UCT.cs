@@ -113,7 +113,7 @@ public class UCT : MonoBehaviour
     {
         // TODO check if the node nt is fully expanded or not
         // 4 available actions
-        if (v.childern.count == 4)
+        if (v.children.Count == 4)
         {
             return true;
         }
@@ -141,9 +141,9 @@ public class UCT : MonoBehaviour
             );
 
         // TODO: add child to the children of the current node, set parent and parentAction of child, change currentNode
-        v.children.add(child);
+        v.children.Add(child);
         child.parent = v;
-        child.parentAction = parent.children.count-1;
+        child.parentAction = v.children.Count - 1;
         return child;
     }
 
@@ -154,12 +154,12 @@ public class UCT : MonoBehaviour
     private Node BestChild(Node v, float c)
     {
         Node bestChild = null;
-        
-        // TODO find best child // the arg max part
-        bestChild = v.childern.first();
-        float score = UCTvalue(bestChild);
 
-        foreach (Node child in v.childern)
+        // TODO find best child // the arg max part
+        bestChild = v.children[0];
+        float score = UCTvalue(bestChild, c);
+
+        foreach (Node child in v.children)
         {
             float newScore = UCTvalue(child, C);
             if (newScore > score)
@@ -181,8 +181,11 @@ public class UCT : MonoBehaviour
     private float UCTvalue(Node v, float c)
     {
         // TODO: calculate the UCT value for the node n and return it
-        throw new UnityException("You didn't implement something!");
-        return 0;
+        return (v.reward / v.timesvisited) + C * Mathf.Sqrt(
+            (2 * Mathf.Log(v.parent.timesvisited))
+            /
+            v.timesvisited);
+        // return 0;
     }
 
     /**
@@ -211,7 +214,12 @@ public class UCT : MonoBehaviour
     private void Backpropagate(Node v, float reward)
     {
         // TODO update the reward and timesvisited of the current node and all its parents until you reach the root of the tree
-        throw new UnityException("You didn't implement something!");
+        while (v != null)
+        {
+            v.timesvisited += 1;
+            v.reward += reward;
+            v = v.parent;
+        }
     }
 
     /**
