@@ -57,9 +57,9 @@ public class UCT : MonoBehaviour
             iterations++;
 
             //TODO Implement UCT algorithm here
-            Node v = TreePolicy(rootNode);
-            float delta = DefaultPolicy(v);
-            Backpropagate(v, delta);
+            Node newNode = TreePolicy(rootNode);
+            float reward = DefaultPolicy(newNode);
+            Backpropagate(newNode, reward);
         }
 
         /*
@@ -69,6 +69,7 @@ public class UCT : MonoBehaviour
         //finding the child that has the best reward gives us the best action
         int bestAction = 0;
         float bestReward = 0;
+
         // TODO calculate which is the best action
         foreach (Node v in rootNode.children)
         {
@@ -78,8 +79,11 @@ public class UCT : MonoBehaviour
                 bestAction = v.parentAction;
             }
         }
-
         return bestAction;
+
+        // Alternative
+        Node bestChild = BestChild(rootNode, 0);
+        return bestChild.parentAction;
     }
 
     /**
@@ -113,11 +117,10 @@ public class UCT : MonoBehaviour
     {
         // TODO check if the node nt is fully expanded or not
         // 4 available actions
-        if (v.children.Count == 4)
-        {
+        if (v.children.Count < 4)
+            return false;
+        else
             return true;
-        }
-        return false;
     }
 
     /**
@@ -143,7 +146,7 @@ public class UCT : MonoBehaviour
         // TODO: add child to the children of the current node, set parent and parentAction of child, change currentNode
         v.children.Add(child);
         child.parent = v;
-        child.parentAction = v.children.Count - 1;
+        child.parentAction = action;
         return child;
     }
 
@@ -156,16 +159,15 @@ public class UCT : MonoBehaviour
         Node bestChild = null;
 
         // TODO find best child // the arg max part
-        bestChild = v.children[0];
-        float score = UCTvalue(bestChild, c);
+        float bestScore = float.NegativeInfinity;
 
         foreach (Node child in v.children)
         {
             float newScore = UCTvalue(child, C);
-            if (newScore > score)
+            if (newScore > bestScore)
             {
                 bestChild = child;
-                score = newScore;
+                bestScore = newScore;
             }
         }
 
