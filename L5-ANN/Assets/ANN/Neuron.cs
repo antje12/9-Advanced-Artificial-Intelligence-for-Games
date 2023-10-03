@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class Neuron
 {
     public List<Synapse> inputs;
@@ -30,7 +29,14 @@ public class Neuron
 
     public double CalculateValue()
     {
-        throw new UnityException("You haven't implemented this method");
+        // ToDo
+        double sum = bias;
+        foreach (Synapse input in inputs)
+        {
+            sum += input.inputNeuron.value * input.weight;
+        }
+        value = Sigmoid(sum);
+        return value;
     }
 
     double Sigmoid(double x)
@@ -45,18 +51,29 @@ public class Neuron
 
     public double CalculateError(double target)
     {
-        throw new UnityException("You haven't implemented this method");
+        // ToDo
+        return 0.5 * Mathf.Pow((float) (target - value), 2);
     }
 
     public void CalculateGradient(double target) //for output layer
     {
+        // ToDo
         //value is the y
-        throw new UnityException("You haven't implemented this method");
+        gradient = (target - value) * SigmoidDerivative(value);
     }
 
     public void CalculateGradient() //for hidden layers
     {
-        throw new UnityException("You haven't implemented this method");
+        // ToDo
+        // Calculate the sum of the weighted gradients from the neurons in the next layer
+        double sumWeightedGradients = 0.0;
+        foreach (Synapse outputSynapse in outputs)
+        {
+            sumWeightedGradients += outputSynapse.weight * outputSynapse.outputNeuron.gradient;
+        }
+
+        // Calculate the gradient for the current neuron
+        gradient = sumWeightedGradients * SigmoidDerivative(value);
     }
 
     public void UpdateWeights(double learningRate)
@@ -65,8 +82,12 @@ public class Neuron
         double biasDelta = learningRate * gradient;
         bias += biasDelta;
 
+        // ToDo
         //update the other weights
-        throw new UnityException("You haven't implemented this method");
+        foreach (Synapse input in inputs)
+        {
+            double weightDelta = learningRate * gradient * input.inputNeuron.value;
+            input.weight -= weightDelta;
+        }
     }
 }
-

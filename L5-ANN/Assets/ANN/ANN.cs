@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-
 public class ANN
 {
     public double learningRate;
@@ -65,12 +64,42 @@ public class ANN
 
     private void ForwardPropagate(params double[] inputs)
     {
-        throw new UnityException("You haven't implemented this method");
+        // ToDo
+        // Set input values
+        for (int i = 0; i < inputLayer.Count; i++)
+            inputLayer[i].value = inputs[i];
+
+        // Propagate through hidden layers
+        foreach (var hiddenLayer in hiddenLayers)
+        {
+            foreach (var neuron in hiddenLayer)
+                neuron.CalculateValue();
+        }
+
+        // Propagate through output layer
+        foreach (var neuron in outputLayer)
+            neuron.CalculateValue();
     }
 
     private void BackPropagate(params double[] targets)
     {
-        throw new UnityException("You haven't implemented this method");
+        // ToDo
+        // Calculate output layer gradients
+        for (int i = 0; i < outputLayer.Count; i++)
+            outputLayer[i].CalculateGradient(targets[i]);
+
+        // Calculate hidden layer gradients
+        for (int i = hiddenLayers.Count - 1; i >= 0; i--)
+            foreach (var neuron in hiddenLayers[i])
+                neuron.CalculateGradient();
+
+        // Update weights
+        foreach (var hiddenLayer in hiddenLayers)
+            foreach (var neuron in hiddenLayer)
+                neuron.UpdateWeights(learningRate);
+
+        foreach (var neuron in outputLayer)
+            neuron.UpdateWeights(learningRate);
     }
 
     public double[] Compute(double[] inputs)

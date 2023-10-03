@@ -17,6 +17,7 @@ public class ANNComponent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Topology: 2 input, 3 hidden, 1 output
         net = new ANN(2, 3, 1);
     }
 
