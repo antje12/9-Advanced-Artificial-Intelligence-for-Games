@@ -33,7 +33,7 @@ public class Neuron
         double sum = bias;
         foreach (Synapse input in inputs)
         {
-            sum += input.inputNeuron.value * input.weight;
+            sum += input.weight * input.inputNeuron.value;
         }
         value = Sigmoid(sum);
         return value;
@@ -52,28 +52,30 @@ public class Neuron
     public double CalculateError(double target)
     {
         // ToDo
-        return 0.5 * Mathf.Pow((float) (target - value), 2);
+        //return 0.5 * Mathf.Pow((float) (target - value), 2);
+        return target - value;
     }
 
     public void CalculateGradient(double target) //for output layer
     {
         // ToDo
         //value is the y
-        gradient = (target - value) * SigmoidDerivative(value);
+        //gradient = (target - value) * SigmoidDerivative(value);
+        gradient = CalculateError(target) * SigmoidDerivative(value);
     }
 
     public void CalculateGradient() //for hidden layers
     {
         // ToDo
         // Calculate the sum of the weighted gradients from the neurons in the next layer
-        double sumWeightedGradients = 0.0;
-        foreach (Synapse outputSynapse in outputs)
+        double sumOfErrorGradients = 0;
+        foreach (Synapse output in outputs)
         {
-            sumWeightedGradients += outputSynapse.weight * outputSynapse.outputNeuron.gradient;
+            sumOfErrorGradients += output.weight * output.outputNeuron.gradient;
         }
 
         // Calculate the gradient for the current neuron
-        gradient = sumWeightedGradients * SigmoidDerivative(value);
+        gradient = sumOfErrorGradients * SigmoidDerivative(value);
     }
 
     public void UpdateWeights(double learningRate)
@@ -86,8 +88,8 @@ public class Neuron
         //update the other weights
         foreach (Synapse input in inputs)
         {
-            double weightDelta = learningRate * gradient * input.inputNeuron.value;
-            input.weight -= weightDelta;
+            double delta = learningRate * gradient * input.inputNeuron.value;
+            input.weight += delta;
         }
     }
 }

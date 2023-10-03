@@ -85,21 +85,23 @@ public class ANN
     {
         // ToDo
         // Calculate output layer gradients
+        // Update weights
         for (int i = 0; i < outputLayer.Count; i++)
+        {
             outputLayer[i].CalculateGradient(targets[i]);
+            outputLayer[i].UpdateWeights(learningRate);
+        }
 
         // Calculate hidden layer gradients
-        for (int i = hiddenLayers.Count - 1; i >= 0; i--)
-            foreach (var neuron in hiddenLayers[i])
-                neuron.CalculateGradient();
-
         // Update weights
-        foreach (var hiddenLayer in hiddenLayers)
-            foreach (var neuron in hiddenLayer)
-                neuron.UpdateWeights(learningRate);
-
-        foreach (var neuron in outputLayer)
-            neuron.UpdateWeights(learningRate);
+        foreach (var layer in hiddenLayers.AsEnumerable<List<Neuron>>().Reverse())
+        {
+            foreach (Neuron n in layer)
+            {
+                n.CalculateGradient();
+                n.UpdateWeights(learningRate);
+            }
+        }
     }
 
     public double[] Compute(double[] inputs)
