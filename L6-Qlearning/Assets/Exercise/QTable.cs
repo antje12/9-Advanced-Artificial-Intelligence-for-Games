@@ -19,12 +19,14 @@ namespace Exercise
          * for creating random numbers
          */
         System.Random randomGenerator;
+
         /**
          * the table variable stores the Q-table, where the state is saved
          * directly as the actual map. Each map state has an array of Q values
          * for all the actions available for that state.
          */
         Dictionary<string, float[]> table;
+
         /**
          * the actionRange variable determines the number of actions available
          * at any map state, and therefore the number of Q values in each entry
@@ -42,6 +44,7 @@ namespace Exercise
          * training goes on.
          */
         float explorationChance = 0.4f;
+
         /**
          * the discount factor is saved as the gammaValue variable. The
          * discount factor determines the importance of future rewards.
@@ -50,6 +53,7 @@ namespace Exercise
          * try to maximize the long-term reward even if it is many moves away.
          */
         float gammaValue = 0.9f;
+
         /**
          * the learningRate determines how new information affects accumulated
          * information from previous instances. If the learningRate is 1, then
@@ -67,6 +71,7 @@ namespace Exercise
          * was made must be stored.
          */
         public char[] prevState;
+
         /**
          * Since in Q-learning the updates to the Q values are made ONE STEP
          * LATE, the index of the action which resulted in the reward must be
@@ -104,6 +109,7 @@ namespace Exercise
             {
                 prevAction = getBestAction(map);
             }
+
             return prevAction;
         }
 
@@ -174,7 +180,8 @@ namespace Exercise
             float[] qValues = getActionsQValues(map);
 
             // Q-learning update rule
-            float updatedQValue = qValues[prevAction] + learningRate * (reward + gammaValue * qValues[bestAction] - qValues[prevAction]);
+            float updatedQValue = qValues[prevAction] +
+                                  learningRate * (reward + gammaValue * qValues[bestAction] - qValues[prevAction]);
 
             // Update the Q-value for the previous state and action
             qValues[prevAction] = updatedQValue;
@@ -193,8 +200,10 @@ namespace Exercise
             {
                 result += "" + map[x];
             }
+
             return result;
         }
+
         /**
          * The getActionsQValues function returns an array of Q values for
          * all the actions available at any state. Note that if the current
@@ -216,8 +225,10 @@ namespace Exercise
                 table.Add(getMapString(map), initialActions);
                 return initialActions;
             }
+
             return actions;
         }
+
         /**
          * printQtable is included for debugging purposes and uses the
          * action labels used in the maze class (even though the Qtable
@@ -252,6 +263,7 @@ namespace Exercise
             {
                 return value;
             }
+
             return null;
         }
     }
