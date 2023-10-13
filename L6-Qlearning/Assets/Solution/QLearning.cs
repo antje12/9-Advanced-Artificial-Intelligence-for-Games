@@ -1,9 +1,10 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
 /**
 * Q Learning sample class <br/>
 * <b>The goal of this code sample is for the character @ to reach the goal area G</b> <br/>
@@ -12,7 +13,7 @@ using Random = UnityEngine.Random;
 *
 * @author A.Liapis (Original author), A. Hartzen (2015 modifications), Marco Scirea (2019 C#/Unity adaptation)
 */
-namespace Exercise
+namespace Solution
 {
     public class QLearning : MonoBehaviour
     {
@@ -22,7 +23,8 @@ namespace Exercise
         protected char[] map;
         char[] startingMap;
         public Visualization vs;
-        [Range(0.01f, 1)] public float timestep = 0.5f;
+        [Range(0.01f,1)]
+        public float timestep = 0.5f;
         public bool visualizeQValues = true;
 
         // --- movement constants
@@ -53,7 +55,6 @@ namespace Exercise
                 gX = Random.Range(0, size);
                 gY = Random.Range(0, size);
             } while (gX == pX && gY == pY);
-
             map[gX + gY * size] = 'G';
             // add some obstacles
             for (int i = 0; i < obstacles; i++)
@@ -65,7 +66,6 @@ namespace Exercise
                     oX = Random.Range(0, size);
                     oY = Random.Range(0, size);
                 } while ((oX == pX && oY == pY) || (oX == gX && oY == gY));
-
                 map[oX + oY * size] = '#';
             }
 
@@ -74,7 +74,7 @@ namespace Exercise
 
         public void resetMaze()
         {
-            map = (char[])startingMap.Clone();
+            map = (char[]) startingMap.Clone();
 
             vs.Setup(map, size);
         }
@@ -101,7 +101,6 @@ namespace Exercise
             {
                 return nextMap; // no effect
             }
-
             int nextAvatarIndex = getNextAvatarIndex(action, avatarIndex);
             if (nextAvatarIndex >= 0 && nextAvatarIndex < map.Length)
             {
@@ -112,7 +111,6 @@ namespace Exercise
                     nextMap[nextAvatarIndex] = '@';
                 }
             }
-
             return nextMap;
         }
 
@@ -125,7 +123,6 @@ namespace Exercise
             {
                 return nextMap; // no effect
             }
-
             int nextAvatarIndex = getNextAvatarIndex(action, avatarIndex);
             if (nextAvatarIndex >= 0 && nextAvatarIndex < map.Length)
             {
@@ -136,7 +133,6 @@ namespace Exercise
                     nextMap[nextAvatarIndex] = '@';
                 }
             }
-
             return nextMap;
         }
 
@@ -162,12 +158,8 @@ namespace Exercise
             int avatarIndex = -1;
             for (int i = 0; i < map.Length; i++)
             {
-                if (map[i] == '@')
-                {
-                    avatarIndex = i;
-                }
+                if (map[i] == '@') { avatarIndex = i; }
             }
-
             return avatarIndex;
         }
 
@@ -176,12 +168,8 @@ namespace Exercise
             int avatarIndex = -1;
             for (int i = 0; i < map.Length; i++)
             {
-                if (map[i] == '@')
-                {
-                    avatarIndex = i;
-                }
+                if (map[i] == '@') { avatarIndex = i; }
             }
-
             return avatarIndex;
         }
 
@@ -190,12 +178,8 @@ namespace Exercise
             int goalIndex = -1;
             for (int i = 0; i < map.Length; i++)
             {
-                if (map[i] == 'G')
-                {
-                    goalIndex = i;
-                }
+                if (map[i] == 'G') { goalIndex = i; }
             }
-
             return (goalIndex == -1);
         }
 
@@ -204,12 +188,8 @@ namespace Exercise
             int goalIndex = -1;
             for (int i = 0; i < map.Length; i++)
             {
-                if (map[i] == 'G')
-                {
-                    goalIndex = i;
-                }
+                if (map[i] == 'G') { goalIndex = i; }
             }
-
             return (goalIndex == -1);
         }
 
@@ -221,7 +201,6 @@ namespace Exercise
             {
                 y--;
             }
-
             if (action == RIGHT)
             {
                 x++;
@@ -234,18 +213,16 @@ namespace Exercise
             {
                 x--;
             }
-
             if (x < 0 || y < 0 || x >= size || y >= size)
             {
                 return currentAvatarIndex; // no move
             }
-
             return x + size * y;
         }
 
         public void printMap()
         {
-            vs.UpdateMap(map, size);
+            vs.UpdateMap(map,size);
         }
 
         public String getMoveName(int action)
@@ -267,7 +244,6 @@ namespace Exercise
             {
                 result = "LEFT";
             }
-
             return result;
         }
 
@@ -297,7 +273,6 @@ namespace Exercise
                 moveCounter++;
 
                 // REWARDS AND ADJUSTMENT OF WEIGHTS SHOULD TAKE PLACE HERE
-                // ToDo
                 int reward = 0;
                 if (Enumerable.SequenceEqual(map, prevState))
                     reward = -5;

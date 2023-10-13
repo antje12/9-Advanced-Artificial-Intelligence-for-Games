@@ -10,9 +10,9 @@ using Random = UnityEngine.Random;
 * documentation, and should be the focus of the students' body of work
 * for the purposes of this tutorial.
 *
-* @author A.Liapis (Original author), A. Hartzen (2015 modifications), Marco Scirea (2019 C#/Unity adaptation) 
+* @author A.Liapis (Original author), A. Hartzen (2015 modifications), Marco Scirea (2019 C#/Unity adaptation)
 */
-namespace Exercise
+namespace Solution
 {
     public class QTable
     {
@@ -20,14 +20,12 @@ namespace Exercise
          * for creating random numbers
          */
         System.Random randomGenerator;
-
         /**
          * the table variable stores the Q-table, where the state is saved
          * directly as the actual map. Each map state has an array of Q values
          * for all the actions available for that state.
          */
         Dictionary<string, float[]> table;
-
         /**
          * the actionRange variable determines the number of actions available
          * at any map state, and therefore the number of Q values in each entry
@@ -44,8 +42,7 @@ namespace Exercise
          * because it is customary that the exploration chance changes as the
          * training goes on.
          */
-        float explorationChance = 0.4f;
-
+        float explorationChance = 0.1f;
         /**
          * the discount factor is saved as the gammaValue variable. The
          * discount factor determines the importance of future rewards.
@@ -54,7 +51,6 @@ namespace Exercise
          * try to maximize the long-term reward even if it is many moves away.
          */
         float gammaValue = 0.9f;
-
         /**
          * the learningRate determines how new information affects accumulated
          * information from previous instances. If the learningRate is 1, then
@@ -72,7 +68,6 @@ namespace Exercise
          * was made must be stored.
          */
         public char[] prevState;
-
         /**
          * Since in Q-learning the updates to the Q values are made ONE STEP
          * LATE, the index of the action which resulted in the reward must be
@@ -110,7 +105,6 @@ namespace Exercise
             {
                 prevAction = getBestAction(map);
             }
-
             return prevAction;
         }
 
@@ -128,7 +122,6 @@ namespace Exercise
          */
         int getBestAction(char[] map)
         {
-            // ToDo
             float[] qValues = getActionsQValues(map);
             List<int> bestActions = new List<int>();
             float bestValue = float.NegativeInfinity;
@@ -158,8 +151,7 @@ namespace Exercise
          */
         int explore()
         {
-            // ToDo
-            return Random.Range(0, actionRange);
+            return Random.Range(0,4);
         }
 
         /**
@@ -176,7 +168,6 @@ namespace Exercise
          */
         public void updateQvalue(int reward, char[] map)
         {
-            // ToDo
             float[] qValues = getActionsQValues(map);
             float bestValue = float.NegativeInfinity;
             for (int i = 0; i < qValues.Length; i++)
@@ -207,10 +198,8 @@ namespace Exercise
             {
                 result += "" + map[x];
             }
-
             return result;
         }
-
         /**
          * The getActionsQValues function returns an array of Q values for
          * all the actions available at any state. Note that if the current
@@ -232,10 +221,8 @@ namespace Exercise
                 table.Add(getMapString(map), initialActions);
                 return initialActions;
             }
-
             return actions;
         }
-
         /**
          * printQtable is included for debugging purposes and uses the
          * action labels used in the maze class (even though the Qtable
@@ -270,7 +257,6 @@ namespace Exercise
             {
                 return value;
             }
-
             return null;
         }
     }
